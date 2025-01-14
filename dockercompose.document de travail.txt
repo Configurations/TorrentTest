@@ -1,0 +1,620 @@
+docker run --rm \
+    --init \
+    -v /${host_folder_branch_1>:/branch_1 \
+    -v /${host_folder_branch_2}:/branch_2 \
+    -v /${host_folder_mountpoint}:/mountpoint:shared \
+    --cap-add SYS_ADMIN \
+    --device /dev/fuse \
+    ghcr.io/hotio/mergerfs -o allow_other /branch_1:/branch_2 /mountpoint
+	
+
+
+  autoscan:
+    container_name: autoscan
+    image: ghcr.io/hotio/autoscan
+    ports:
+      - "3030:3030"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./${host_folder_config}:/config
+      - ./${host_folder_data}:/data
+
+
+  bazarr:
+    container_name: bazarr
+    image: ghcr.io/hotio/bazarr
+    ports:
+      - "6767:6767"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+      - WEBUI_PORTS=6767/tcp,6767/udp
+    volumes:
+      - ./${host_folder_config}:/config
+      - ./${host_folder_data}:/data
+
+
+  caddy:
+    container_name: caddy
+    image: ghcr.io/hotio/caddy
+    ports:
+      - "80:8080"
+      - "443:8443"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+      - CUSTOM_BUILD
+    volumes:
+      - ./${host_folder_config}:/config
+
+
+  cloudflareddns:
+    container_name: cloudflareddns
+    image: ghcr.io/hotio/cloudflareddns
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+      - INTERVAL=300
+      - DETECTION_MODE=dig-whoami.cloudflare
+      - LOG_LEVEL=3
+      - CF_USER=your.cf.email@example.com
+      - CF_APIKEY=your.global.apikey
+      - CF_APITOKEN
+      - CF_APITOKEN_ZONE
+      - CF_HOSTS=test.example.com;test.foobar.com;test2.foobar.com
+      - CF_ZONES=example.com;foobar.com;foobar.com
+      - CF_RECORDTYPES=A;A;AAAA
+    volumes:
+      - ./${host_folder_config}:/config
+
+
+  doplarr:
+    container_name: doplarr
+    image: ghcr.io/hotio/doplarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./${host_folder_config}:/config
+
+
+  duplicacy:
+    container_name: duplicacy
+    hostname: duplicacy
+    image: ghcr.io/hotio/duplicacy
+    ports:
+      - "3875:3875"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./${host_folder_config}:/config
+      - ./${host_folder_cache}:/cache
+      - ./${host_folder_logs}:/logs
+      - ./${host_folder_data}:/data
+
+
+  jackett:
+    container_name: jackett
+    image: ghcr.io/hotio/jackett
+    ports:
+      - "9117:9117"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./${host_folder_config}:/config
+
+
+  jellyfin:
+    container_name: jellyfin
+    image: ghcr.io/hotio/jellyfin
+    ports:
+      - "8096:8096"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./${host_folder_config}:/config
+      - ./${host_folder_data}:/data
+
+
+  jellyseerr:
+    container_name: jellyseerr
+    image: ghcr.io/hotio/jellyseerr
+    ports:
+      - "5055:5055"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./${host_folder_config}:/config
+
+
+  lidarr:
+    container_name: lidarr
+    image: ghcr.io/hotio/lidarr
+    ports:
+      - "8686:8686"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./${host_folder_config}:/config
+      - ./${host_folder_data}:/data
+
+
+  nzbget:
+    container_name: nzbget
+    image: ghcr.io/hotio/nzbget
+    ports:
+      - "6789:6789"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./${host_folder_config}:/config
+      - ./${host_folder_data}:/data
+
+
+  nzbhydra2:
+    container_name: nzbhydra2
+    image: ghcr.io/hotio/nzbhydra2
+    ports:
+      - "5076:5076"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./${host_folder_config}:/config
+
+
+  overseerr:
+    container_name: overseerr
+    image: ghcr.io/hotio/overseerr
+    ports:
+      - "5055:5055"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./${host_folder_config}:/config
+
+
+  plex:
+    container_name: plex
+    image: ghcr.io/hotio/plex
+    ports:
+      - "32400:32400"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+      - PLEX_CLAIM_TOKEN
+      - PLEX_ADVERTISE_URL
+      - PLEX_NO_AUTH_NETWORKS
+      - PLEX_BETA_INSTALL=false
+      - PLEX_PURGE_CODECS=false
+    volumes:
+      - ./${host_folder_config}:/config
+      - ./${host_folder_transcode}:/transcode
+      - ./${host_folder_data}:/data
+
+
+  prowlarr:
+    container_name: prowlarr
+    image: ghcr.io/hotio/prowlarr
+    ports:
+      - "9696:9696"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./${host_folder_config}:/config
+
+
+  qbitmanage:
+    container_name: qbitmanage
+    image: ghcr.io/hotio/qbitmanage
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+      - ARGS
+    volumes:
+      - ./${host_folder_config}:/config
+      - ./${host_folder_data}:/data
+	  
+
+  qbittorrent:
+    container_name: qbittorrent
+    image: ghcr.io/hotio/qbittorrent
+    ports:
+      - "8080:8080"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+      - WEBUI_PORTS=8080/tcp,8080/udp
+    volumes:
+      - ./${host_folder_config}:/config
+      - ./${host_folder_data}:/data
+	  
+
+  radarr:
+    container_name: radarr
+    image: ghcr.io/hotio/radarr
+    ports:
+      - "7878:7878"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./${host_folder_config}:/config
+      - ./${host_folder_data}:/data
+	  
+
+  readarr:
+    container_name: readarr
+    image: ghcr.io/hotio/readarr
+    ports:
+      - "8787:8787"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./${host_folder_config}:/config
+      - ./${host_folder_data}:/data
+
+
+  requestrr:
+    container_name: requestrr
+    image: ghcr.io/hotio/requestrr
+    ports:
+      - "4545:4545"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./${host_folder_config}:/config
+
+
+  rflood:
+    container_name: rflood
+    image: ghcr.io/hotio/rflood
+    ports:
+      - "3000:3000"
+      - "5000:5000"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+      - FLOOD_AUTH=false
+      - ARGS
+      - FLOOD_ARGS
+    volumes:
+      - ./${host_folder_config}:/config
+      - ./${host_folder_data}:/data
+
+
+  sabnzbd:
+    container_name: sabnzbd
+    image: ghcr.io/hotio/sabnzbd
+    ports:
+      - "8080:8080"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+      - WEBUI_PORTS=8080/tcp,8080/udp
+      - ARGS
+    volumes:
+      - ./${host_folder_config}:/config
+      - ./${host_folder_data}:/data
+
+
+  sonarr:
+    container_name: sonarr
+    image: ghcr.io/hotio/sonarr
+    ports:
+      - "8989:8989"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./${host_folder_config}:/config
+      - ./${host_folder_data}:/data
+
+
+  stash:
+    container_name: stash
+    image: ghcr.io/hotio/stash
+    ports:
+      - "9999:9999"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./${host_folder_config}:/config
+      - ./${host_folder_data}:/data
+
+
+  tautulli:
+    container_name: tautulli
+    image: ghcr.io/hotio/tautulli
+    ports:
+      - "8181:8181"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+      - WEBUI_PORTS=8181/tcp,8181/udp
+    volumes:
+      - ./${host_folder_config}:/config
+
+
+  unpackerr:
+    container_name: unpackerr
+    image: ghcr.io/hotio/unpackerr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./${host_folder_config}:/config
+      - ./${host_folder_data}:/data
+
+
+  whisparr:
+    container_name: whisparr
+    image: ghcr.io/hotio/whisparr
+    ports:
+      - "6969:6969"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./${host_folder_config}:/config
+      - ./${host_folder_data}:/data
+	  
+
+
+
+
+
+
+https://www.youtube.com/watch?v=gQ56YY4Y56o&t=225s
+
+Volumes
+
+config/deluge
+config/jackett
+config/nginx
+config/overseerr
+config/plex_media
+config/prowlarr
+config/qbittorent
+config/radarr
+config/transmission
+config/xteve
+
+
+helmarr
+pushover
+
+
+
+
+<TZ>: Etc/UTC
+
+volumes
+${jackett_folder_config}
+${nginx_folder_config}
+${nginx_folder_letsencrypt}
+${overseerr_folder_config}
+${prowlarr_folder_config}
+${qbittorrent_folder_config}
+${qbittorrent_folder_data}
+${radarr_folder_config}
+${radarr_folder_data}
+${sonarr_folder_config}
+${sonarr_folder_data}
+${transmission_folder_config}
+${transmission_folder_download}
+${transmission_folder_media}
+${xteve_folder_config}
+
+	  
+
+images
+linuxserver/deluge
+
+ 
+services:
+  jackett:
+    container_name: jackett
+    image: ghcr.io/hotio/jackett
+	restart: unless-stopped
+	network_mode: bridge
+    ports:
+      - "9117:9117"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=${TZ}
+    volumes:
+      - ./${jackett_folder_config}:/config
+
+services:
+  nginx:
+	container_name: nginx
+    image: 'docker.io/jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+	network_mode: bridge
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./${nginx_folder_config}:/data
+      - ./${nginx_folder_letsencrypt}:/etc/letsencrypt
+  overseerr:
+    container_name: overseerr
+    image: ghcr.io/hotio/overseerr
+	restart: unless-stopped
+	network_mode: bridge
+    ports:
+      - "5055:5055"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=${TZ}
+    volumes:
+      - ./${overseerr_folder_config}:/config
+  prowlarr:
+    container_name: prowlarr
+    image: ghcr.io/hotio/prowlarr
+	restart: unless-stopped
+	network_mode: bridge
+    ports:
+      - "9696:9696"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=${TZ}
+    volumes:
+      - ./${prowlarr_folder_config}:/config
+  qbittorrent:
+    container_name: qbittorrent
+    image: ghcr.io/hotio/qbittorrent
+	restart: unless-stopped
+	network_mode: bridge
+    ports:
+      - "8080:8080"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=${TZ}
+      - WEBUI_PORTS=8080/tcp,8080/udp
+    volumes:
+      - ./${qbittorrent_folder_config}:/config
+      - ./${qbittorrent_folder_data}:/data
+  radarr:
+    container_name: radarr
+    image: ghcr.io/hotio/radarr
+	restart: unless-stopped
+	network_mode: bridge
+    ports:
+      - "7878:7878"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=${TZ}
+    volumes:
+      - ./${radarr_folder_config}:/config
+      - ./${radarr_folder_data}:/data
+
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    container_name: transmission
+	restart: unless-stopped
+	network_mode: bridge
+	ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TZ}
+      - TRANSMISSION_WEB_HOME= #optional
+      - USER= ${user_transmission}
+      - PASS= ${pass_transmission}
+											- WHITELIST= #optional
+											- PEERPORT= #optional
+											- HOST_WHITELIST= #optional
+    volumes:
+      - ./${transmission_folder_config}:/config
+	  - ./${transmission_folder_download}:/downloads
+      - ./${transmission_folder_media}:/watch	  
+services:
+  xteve:
+    container_name: xteve
+    image: dnsforge/xteve
+	restart: unless-stopped
+	network_mode: bridge
+    ports:
+      - "34400:34400"
+    environment:	
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TZ}
+	  - XTEVE_PORT=8080
+	  - XTEVE_BRANCH=master
+	  - XTEVE_DEBUG=0
+	  - XTEVE_API=1
+	  - GUIDE2GO_SERVER_HOST=10.0.0.1
+	  - GUIDE2GO_SERVER_PORT=31337
+    volumes:      
+      - ./${xteve_folder_config}:/home/xteve/conf	  
+
+
+
+
+
+
+
