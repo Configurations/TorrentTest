@@ -1,5 +1,9 @@
 version: '3.8'
 
+# networks:
+#   bridge:
+#     enable_ipv4: true
+
 services:
  
   sonarr:
@@ -89,18 +93,53 @@ services:
     - ./${transmission_folder_download}:/downloads
     - ./${transmission_folder_media}:/watch	  
 
-  # radarr:
-  #   container_name: radarr
-  #   image: ghcr.io/hotio/radarr
-  #   restart: unless-stopped
-  #   network_mode: bridge
-  #   ports:
-  #   - "7878:7878"
-  #   environment:
-  #   - PUID=1000
-  #   - PGID=1000
-  #   - UMASK=002
-  #   - TZ=${TZ}
-  #   volumes:
-  #   - ./${radarr_folder_config}:/config
-  #   - ./${radarr_folder_data}:/data
+  radarr:
+    container_name: radarr
+    image: linuxserver/radarr
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+    - "7878:7878"
+    environment:
+    - PUID=1000
+    - PGID=1000
+    - UMASK=002
+    - TZ=${TZ}
+    volumes:
+    - ./${radarr_folder_config}:/config
+    - ./${radarr_folder_data}:/data
+
+  xteve:
+    container_name: xteve
+    image: dnsforge/xteve
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - "34400:34400"
+    environment:	
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TZ}
+      - XTEVE_PORT=8080
+      - XTEVE_BRANCH=master
+      - XTEVE_DEBUG=0
+      - XTEVE_API=1
+      - GUIDE2GO_SERVER_HOST=10.0.0.1
+      - GUIDE2GO_SERVER_PORT=31337
+    volumes:      
+      - ./${xteve_folder_config}:/home/xteve/conf
+
+  overseerr:
+    container_name: overseerr
+    image: ghcr.io/hotio/overseerr
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - "5055:5055"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=${TZ}
+    volumes:
+      - ./${overseerr_folder_config}:/config

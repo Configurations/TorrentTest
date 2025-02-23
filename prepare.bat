@@ -18,5 +18,9 @@ MKDIR torrent/config/transmission
 MKDIR torrent/data/transmission
 MKDIR torrent/data/transmission
 
+MKDIR torrent/config/radarr
+MKDIR torrent/data/radarr
+MKDIR torrent/config/xteve
+MKDIR torrent/config/overseer
 
 pause
