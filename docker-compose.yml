@@ -14,7 +14,7 @@ services:
     - UMASK=002
     - TZ=${TZ}
     volumes:
-    - /{config}/jackett:/config
+    - /${config}/jackett:/config
 
   sonarr:
     container_name: sonarr
@@ -103,7 +103,7 @@ services:
     - TZ=${TZ}
     volumes:
     - /${config}/radarr:/config
-    - /${share}/$radarr:/data
+    - /${share}/radarr:/data
 
   xteve:
     container_name: xteve
