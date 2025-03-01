@@ -1,5 +1,5 @@
 
 
 
-docker-compose --env-file docker-compose.env up
+docker-compose --env-file stack.env up
 
