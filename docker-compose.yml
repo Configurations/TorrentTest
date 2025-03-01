@@ -9,9 +9,9 @@ services:
     ports:
     - "9117:9117"
     environment:
-    - PUID=1000
-    - PGID=1000
-    - UMASK=002
+    - PUID=${PUID:-1000}
+    - PGID=${PGID:-1000}
+    - UMASK=${UMASK}
     - TZ=${TZ}
     volumes:
     - /${config}/jackett:/config
@@ -24,9 +24,9 @@ services:
     ports:
     - "8989:8989"
     environment:
-    - PUID=1000
-    - PGID=1000
-    - UMASK=002
+    - PUID=${PUID}
+    - PGID=${PGID}
+    - UMASK=${UMASK}
     - TZ=<TZ>
     volumes:
     - /${config}/sonarr:/config
@@ -41,28 +41,29 @@ services:
     ports:
     - "9696:9696"
     environment:
-    - PUID=1000
-    - PGID=1000
-    - UMASK=002
+    - PUID=${PUID}
+    - PGID=${PGID}
+    - UMASK=${UMASK}
     - TZ=${TZ}
     volumes:
     - /${config}/prowlarr:/config
 
   qbittorrent:
     container_name: qbittorrent
-    image: ghcr.io/hotio/qbittorrent
+    image: linuxserver/qbittorrent
     restart: unless-stopped
     network_mode: bridge
     ports:
     - "8080:8080"
+    - "6881:6881"
     environment:
-    - PUID=1000
-    - PGID=1000
-    - UMASK=002
+    - PUID=${PUID}
+    - PGID=${PGID}
+    - UMASK=${UMASK}
     - TZ=${TZ}
     - WEBUI_PORTS=8080/tcp,8080/udp
     volumes:
-    - /${config}/qbittorrent:/config
+    - /${config}:/config
     - /${share}/qbittorrent:/data
 
   transmission:
@@ -75,12 +76,13 @@ services:
     - 51413:51413
     - 51413:51413/udp
     environment:
-    - PUID=1000
-    - PGID=1000
+    - PUID=${PUID}
+    - PGID=${PGID}
+    - UMASK=${UMASK}
     - TZ=${TZ}
     - TRANSMISSION_WEB_HOME= #optional
-    - USER=${user_transmission}
-    - PASS=${pass_transmission}
+    - USER=${user}
+    - PASS=${pass}
     # - WHITELIST= #optional
     # - PEERPORT= #optional
     # - HOST_WHITELIST= #optional
@@ -97,9 +99,9 @@ services:
     ports:
     - "7878:7878"
     environment:
-    - PUID=1000
-    - PGID=1000
-    - UMASK=002
+    - PUID=${PUID}
+    - PGID=${PGID}
+    - UMASK=${UMASK}
     - TZ=${TZ}
     volumes:
     - /${config}/radarr:/config
@@ -111,19 +113,20 @@ services:
     restart: unless-stopped
     network_mode: bridge
     ports:
-      - "34400:34400"
+    - "34400:34400"
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=${TZ}
-      - XTEVE_PORT=8080
-      - XTEVE_BRANCH=master
-      - XTEVE_DEBUG=0
-      - XTEVE_API=1
-      - GUIDE2GO_SERVER_HOST=10.0.0.1
-      - GUIDE2GO_SERVER_PORT=31337
+    - PUID=${PUID}
+    - PGID=${PGID}
+    - UMASK=${UMASK}
+    - TZ=${TZ}
+    - XTEVE_PORT=8080
+    - XTEVE_BRANCH=master
+    - XTEVE_DEBUG=0
+    - XTEVE_API=1
+    - GUIDE2GO_SERVER_HOST=10.0.0.1
+    - GUIDE2GO_SERVER_PORT=31337
     volumes:
-      - /${config}/xteve:/home/xteve/conf
+    - /${config}/xteve:/home/xteve/conf
 
   overseerr:
     container_name: overseerr
@@ -131,11 +134,30 @@ services:
     restart: unless-stopped
     network_mode: bridge
     ports:
-      - "5055:5055"
+    - "5055:5055"
     environment:
-      - PUID=1000
-      - PGID=1000
-      - UMASK=002
-      - TZ=${TZ}
+    - PUID=${PUID}
+    - PGID=${PGID}
+    - UMASK=${UMASK}
+    - TZ=${TZ}
     volumes:
-      - /${config}/overseerr:/config
+    - /${config}/overseerr:/config
+
+  deluge:
+    container_name: deluge
+    image: linuxserver/deluge
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+    - "8112:8112"  # Port pour accéder à l'interface Web de Deluge
+    - "58846:58846"  # Port pour accéder à l'interface Deluge RPC
+    environment:
+    - PUID=${PUID}
+    - PGID=${PGID}
+    - UMASK=${UMASK}
+    - TZ=${TZ}
+    volumes:
+    - /${config}/deluge:/config     # Dossier de configuration de Deluge
+    - /${share}/deluge:/downloads   # Dossier des torrents et données
+
+
