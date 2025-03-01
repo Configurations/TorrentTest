@@ -1,14 +1,24 @@
 version: '3.8'
 
-# networks:
-#   bridge:
-#     enable_ipv4: true
-
 services:
- 
+  jackett:
+    container_name: jackett
+    image: ghcr.io/hotio/jackett
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+    - "9117:9117"
+    environment:
+    - PUID=1000
+    - PGID=1000
+    - UMASK=002
+    - TZ=${TZ}
+    volumes:
+    - /{config}/jackett:/config
+
   sonarr:
     container_name: sonarr
-    image: ghcr.io/hotio/sonarr::lastest
+    image: lscr.io/linuxserver/sonarr:latest
     restart: unless-stopped
     network_mode: bridge
     ports:
@@ -19,23 +29,9 @@ services:
     - UMASK=002
     - TZ=<TZ>
     volumes:
-    - ./${sonarr_folder_config}:/config
-    - ./${sonarr_folder_data}:/data
+    - /${config}/sonarr:/config
+    - /${share}/sonarr:/data
 
-  jackett:
-    container_name: jackett
-    image: ghcr.io/hotio/jackett
-    restart: unless-stopped
-    network_mode: bridge
-    ports:
-      - "9117:9117"
-    environment:
-    - PUID=1000
-    - PGID=1000
-    - UMASK=002
-    - TZ=${TZ}
-    volumes:
-    - ./${jackett_folder_config}:/config
 
   prowlarr:
     container_name: prowlarr
@@ -50,7 +46,7 @@ services:
     - UMASK=002
     - TZ=${TZ}
     volumes:
-    - ./${prowlarr_folder_config}:/config
+    - /${config}/prowlarr:/config
 
   qbittorrent:
     container_name: qbittorrent
@@ -66,8 +62,8 @@ services:
     - TZ=${TZ}
     - WEBUI_PORTS=8080/tcp,8080/udp
     volumes:
-    - ./${qbittorrent_folder_config}:/config
-    - ./${qbittorrent_folder_data}:/data
+    - /${config}/qbittorrent:/config
+    - /${share}/qbittorrent:/data
 
   transmission:
     image: lscr.io/linuxserver/transmission:latest
@@ -89,9 +85,9 @@ services:
     # - PEERPORT= #optional
     # - HOST_WHITELIST= #optional
     volumes:
-    - ./${transmission_folder_config}:/config
-    - ./${transmission_folder_download}:/downloads
-    - ./${transmission_folder_media}:/watch	  
+    - /${config}/transmission:/config
+    - /${share}/transmission_download:/downloads
+    - /${share}/transmission_media}:/watch	  
 
   radarr:
     container_name: radarr
@@ -106,8 +102,8 @@ services:
     - UMASK=002
     - TZ=${TZ}
     volumes:
-    - ./${radarr_folder_config}:/config
-    - ./${radarr_folder_data}:/data
+    - /${config}/radarr:/config
+    - /${share}/$radarr:/data
 
   xteve:
     container_name: xteve
@@ -116,7 +112,7 @@ services:
     network_mode: bridge
     ports:
       - "34400:34400"
-    environment:	
+    environment:
       - PUID=1000
       - PGID=1000
       - TZ=${TZ}
@@ -126,8 +122,8 @@ services:
       - XTEVE_API=1
       - GUIDE2GO_SERVER_HOST=10.0.0.1
       - GUIDE2GO_SERVER_PORT=31337
-    volumes:      
-      - ./${xteve_folder_config}:/home/xteve/conf
+    volumes:
+      - /${config}/xteve:/home/xteve/conf
 
   overseerr:
     container_name: overseerr
@@ -142,4 +138,4 @@ services:
       - UMASK=002
       - TZ=${TZ}
     volumes:
-      - ./${overseerr_folder_config}:/config
+      - /${config}/overseerr:/config
