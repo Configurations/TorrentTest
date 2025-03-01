@@ -87,7 +87,7 @@ services:
     volumes:
     - /${config}/transmission:/config
     - /${share}/transmission_download:/downloads
-    - /${share}/transmission_media}:/watch	  
+    - /${share}/transmission_media:/watch	  
 
   radarr:
     container_name: radarr
