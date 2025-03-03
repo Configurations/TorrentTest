@@ -1,7 +1,7 @@
 {
  "clientId": "6f5c0cca-eabf-4ee1-8c2c-9752a3f1a253",
- "vapidPrivate": "",
- "vapidPublic": "",
+ "vapidPrivate": "Bl6EMQf5Ma_l4GulGWsl6gGN5QIkTryiIBNzZgvpNDQ",
+ "vapidPublic": "BJmHAhUYpE3tkuHS_lBsMWKRpljPuUUgHTeesIfye25xdOMqG3pV9aPeKTRzTKSDClxGX7pSOx8bf4klK7kBOMM",
  "main": {
   "apiKey": "MTc0MDgyNzg4MjQ2NWEwNjM4ODdmLTA4MmYtNDZjOC05ZWYwLWVlNjJkZmJiMzAxOQ==",
   "applicationTitle": "Overseerr",
@@ -20,20 +20,81 @@
   "originalLanguage": "",
   "trustProxy": false,
   "partialRequestsEnabled": true,
-  "locale": "en"
+  "locale": "fr"
  },
  "plex": {
-  "name": "",
-  "ip": "",
+  "name": "Home_provins",
+  "ip": "192.168.10.59",
   "port": 32400,
   "useSsl": false,
-  "libraries": []
+  "libraries": [
+   {
+    "id": "2",
+    "name": "Provins Films",
+    "enabled": true,
+    "type": "movie",
+    "lastScan": 1740992400044
+   },
+   {
+    "id": "1",
+    "name": "Provins series",
+    "enabled": true,
+    "type": "show",
+    "lastScan": 1740992400052
+   }
+  ],
+  "machineId": "a57af61ef8ef90c4757b6a2cc36fb8d24a311efd"
  },
  "tautulli": {},
- "radarr": [],
- "sonarr": [],
+ "radarr": [
+  {
+   "name": "Radarr",
+   "hostname": "192.168.10.156",
+   "port": 7878,
+   "apiKey": "966de988fa71419e86ef541c938fbed5",
+   "useSsl": false,
+   "baseUrl": "",
+   "activeProfileId": 1,
+   "activeProfileName": "Any",
+   "activeDirectory": "/data",
+   "is4k": false,
+   "minimumAvailability": "released",
+   "tags": [],
+   "isDefault": true,
+   "syncEnabled": true,
+   "preventSearch": false,
+   "tagRequests": false,
+   "id": 0
+  }
+ ],
+ "sonarr": [
+  {
+   "name": "Sonarr",
+   "hostname": "192.168.10.156",
+   "port": 8989,
+   "apiKey": "15aec3728628421c85ef2eec16ceb3c7",
+   "useSsl": false,
+   "activeProfileId": 3,
+   "activeLanguageProfileId": 1,
+   "activeProfileName": "Series",
+   "activeDirectory": "/data/series",
+   "activeAnimeProfileId": 6,
+   "activeAnimeLanguageProfileId": 1,
+   "activeAnimeProfileName": "Animes",
+   "activeAnimeDirectory": "/data/Animé",
+   "tags": [],
+   "animeTags": [],
+   "is4k": false,
+   "isDefault": false,
+   "enableSeasonFolders": false,
+   "syncEnabled": true,
+   "preventSearch": false,
+   "tagRequests": false,
+   "id": 0
+  }
+ ],
  "public": {
-  "initialized": false
+  "initialized": true
  },
  "notifications": {
   "agents": {

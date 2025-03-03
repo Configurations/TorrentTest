@@ -13,6 +13,7 @@ services:
     - PGID=${PGID:-1000}
     - UMASK=${UMASK}
     - TZ=${TZ}
+    - AUTO_UPDATE=true
     volumes:
     - /${config}/jackett:/config
 
@@ -65,6 +66,7 @@ services:
     volumes:
     - /${config}:/config
     - /${share}/qbittorrent:/data
+    - /${share}:/download
 
   transmission:
     image: lscr.io/linuxserver/transmission:latest
@@ -89,7 +91,7 @@ services:
     volumes:
     - /${config}/transmission:/config
     - /${share}/transmission_download:/downloads
-    - /${share}/transmission_media:/watch	  
+    - /${share}:/watch
 
   radarr:
     container_name: radarr
@@ -105,11 +107,11 @@ services:
     - TZ=${TZ}
     volumes:
     - /${config}/radarr:/config
-    - /${share}/radarr:/data
+    - /${share}/movies:/data
 
   xteve:
     container_name: xteve
-    image: dnsforge/xteve
+    image: alturismo/xteve
     restart: unless-stopped
     network_mode: bridge
     ports:
@@ -123,10 +125,12 @@ services:
     - XTEVE_BRANCH=master
     - XTEVE_DEBUG=0
     - XTEVE_API=1
-    - GUIDE2GO_SERVER_HOST=10.0.0.1
+    - GUIDE2GO_SERVER_HOST=127.0.0.1
     - GUIDE2GO_SERVER_PORT=31337
     volumes:
     - /${config}/xteve:/home/xteve/conf
+    - /${share}/xteve/m3u:/home/xteve/m3u
+    - /${share}/xteve/xmltv:/home/xteve/xmltv
 
   overseerr:
     container_name: overseerr
@@ -149,7 +153,7 @@ services:
     restart: unless-stopped
     network_mode: bridge
     ports:
-    - "8112:8112"  # Port pour accéder à l'interface Web de Deluge
+    - "8112:8112"  # P ort pour accéder à l'interface Web de Deluge
     - "58846:58846"  # Port pour accéder à l'interface Deluge RPC
     environment:
     - PUID=${PUID}
@@ -160,4 +164,43 @@ services:
     - /${config}/deluge:/config     # Dossier de configuration de Deluge
     - /${share}/deluge:/downloads   # Dossier des torrents et données
 
+  flaresolverr:
+    container_name: flaresolverr
+    image: flaresolverr/flaresolverr:latest
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+    - "8191:8191"
+    - "8192:8192"
+    environment:
+    - PUID=${PUID}
+    - PGID=${PGID}
+    - UMASK=${UMASK}
+    - TZ=${TZ}
+    - LOG_LEVEL=info
+    volumes:
+    - /${config}/flaresolverr/config:/config
+
+#  gluetun:
+#    container_name: gluetun
+#    image: qmcgaw/gluetun
+#    restart: unless-stopped
+#    cap_add:
+#      - NET_ADMIN
+#    environment:
+#    - PUID=${PUID}
+#    - PGID=${PGID}
+#    - UMASK=${UMASK}
+#    - TZ=${TZ}
+#    - VPN_SERVICE_PROVIDER=airvpn
+#    - VPN_TYPE=wireguard
+#    - WIREGUARD_PRIVATE_KEY=XXX
+#    - WIREGUARD_PRESHARED_KEY=XXX
+#    - WIREGUARD_ADDRESSES=000.000.000.000/00
+#    - FIREWALL_VPN_INPUT_PORTS=00000
+#    - WIREGUARD_IMPLEMENTATION=auto
+#    volumes:
+#    - /${config}/gluetun:/gluetun
+#    devices:
+#      - /dev/net/tun:/dev/net/tun
 
